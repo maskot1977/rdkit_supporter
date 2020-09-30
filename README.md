@@ -1,1 +1,1 @@
-# rdkit-installer
+# rdkit_installer
