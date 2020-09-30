@@ -11,7 +11,7 @@ logger.addHandler(StreamHandler())
 logger.setLevel(INFO)
 
 
-def install(
+def from_miniconda(
         chunk_size=4096,
         file_name="Miniconda3-4.7.12-Linux-x86_64.sh",
         url_base="https://repo.continuum.io/miniconda/",
