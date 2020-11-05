@@ -3,8 +3,8 @@
 On Google Colaboratory:
 
 ```python
-!git clone https://github.com/maskot1977/rdkit_installer.git
+!pip install git+https://github.com/maskot1977/rdkit_installer.git
 
-import rdkit_installer.install
-rdkit_installer.install.from_miniconda(rdkit_version='2019.09.2.0', force=True)
+from rdkit_installer import install
+install.from_miniconda()
 ```
