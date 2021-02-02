@@ -4,8 +4,8 @@ from rdkit.Chem import Descriptors
 from rdkit.ML.Descriptors import MoleculeDescriptors
 
 def calc_descriptors(smiles):
-  calc = MoleculeDescriptors.MolecularDescriptorCalculator(desc_names)
   desc_names = [x[0] for x in Descriptors._descList if x[0]]
+  calc = MoleculeDescriptors.MolecularDescriptorCalculator(desc_names)
 
   matrix = []
   for smile in smiles:
