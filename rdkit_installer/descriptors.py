@@ -10,7 +10,6 @@ def calc_descriptors(smiles):
   matrix = []
   for smile in smiles:
     row = []
-    row.append(smile)
     mol = Chem.MolFromSmiles(smile)
     for d in calc.CalcDescriptors(mol):
         row.append(d)
