@@ -11,7 +11,7 @@ class Fingerprinter:
     def __init__(self):
         self.binaryfp_names = [
             "MACCSkeys",
-            # "Avalon",
+            "Avalon",
             "Morgan2(1024bits)",
             "Morgan2F(1024bits)",
             "Morgan4(2048bits)",
@@ -22,7 +22,7 @@ class Fingerprinter:
         ]
         self.binaryfp = [
             lambda mol: MACCSkeys.GenMACCSKeys(mol),
-            # lambda mol: pyAvalonTools.GetAvalonFP(mol),
+            lambda mol: pyAvalonTools.GetAvalonFP(mol),
             lambda mol: AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=1024),
             lambda mol: AllChem.GetMorganFingerprintAsBitVect(
                 mol, 2, nBits=1024, useFeatures=True
