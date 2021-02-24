@@ -74,7 +74,7 @@ def from_miniconda(
         "install",
         "--yes",
         "-c", "rdkit",
-        "python=={}".format(python_version),
+        #"python=={}".format(python_version),
         "rdkit" if rdkit_version is None else "rdkit=={}".format(rdkit_version)])
     logger.info("done")
 
