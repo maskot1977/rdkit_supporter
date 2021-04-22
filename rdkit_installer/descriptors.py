@@ -31,7 +31,7 @@ def calc_400descriptors(smiles):
                 continue
             if desc_name == "setupAUTOCorrDescriptors":
                 continue
-            row.append(getattr(Descriptors, thisFunction)(mol))
+            row.append(getattr(Descriptors, desc_name)(mol))
             desc_names.append(desc_name)
         matrix.append(row)
     return pd.DataFrame(matrix, columns=desc_names)
