@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rdkit_installer",
-    version="0.1.0",
+    version="0.2.0",
     author="masaaki-kotera",
     author_email="maskot1977@gmail.com",
     description="rdkit_installer",
