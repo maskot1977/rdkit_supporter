@@ -5,6 +5,10 @@ from rdkit.Chem import Descriptors
 from rdkit.ML.Descriptors import MoleculeDescriptors
 
 def calc_descriptors(smiles):
+  return calc_400descriptors(smiles)
+  
+  
+def calc_208descriptors(smiles):
   desc_names = [x[0] for x in Descriptors._descList if x[0]]
   calc = MoleculeDescriptors.MolecularDescriptorCalculator(desc_names)
 
