@@ -1,10 +1,10 @@
-import sys
 import os
-import requests
-import subprocess
 import shutil
-from logging import getLogger, StreamHandler, INFO
+import subprocess
+import sys
+from logging import INFO, StreamHandler, getLogger
 
+import requests
 
 logger = getLogger(__name__)
 logger.addHandler(StreamHandler())
@@ -12,13 +12,14 @@ logger.setLevel(INFO)
 
 
 def from_miniconda(
-        chunk_size=4096,
-        file_name="Miniconda3-4.7.12-Linux-x86_64.sh",
-        url_base="https://repo.continuum.io/miniconda/",
-        conda_path=os.path.expanduser(os.path.join("~", "miniconda")),
-        rdkit_version=None,
-        add_python_path=True,
-        force=False):
+    chunk_size=4096,
+    file_name="Miniconda3-4.7.12-Linux-x86_64.sh",
+    url_base="https://repo.continuum.io/miniconda/",
+    conda_path=os.path.expanduser(os.path.join("~", "miniconda")),
+    rdkit_version=None,
+    add_python_path=True,
+    force=False,
+):
     """install rdkit from miniconda
     ```
     import rdkit_installer
@@ -56,27 +57,32 @@ def from_miniconda(
         logger.warning("remove {}".format(conda_path))
         os.remove(conda_path)
 
-    logger.info('fetching installer from {}'.format(url))
+    logger.info("fetching installer from {}".format(url))
     res = requests.get(url, stream=True)
     res.raise_for_status()
-    with open(file_name, 'wb') as f:
+    with open(file_name, "wb") as f:
         for chunk in res.iter_content(chunk_size):
             f.write(chunk)
-    logger.info('done')
+    logger.info("done")
 
-    logger.info('installing miniconda to {}'.format(conda_path))
+    logger.info("installing miniconda to {}".format(conda_path))
     subprocess.check_call(["bash", file_name, "-b", "-p", conda_path])
-    logger.info('done')
+    logger.info("done")
 
     logger.info("installing rdkit")
-    subprocess.check_call([
-        os.path.join(conda_path, "bin", "conda"),
-        "install",
-        "--yes",
-        "-c", "rdkit",
-        #"python=={}".format(python_version),
-        "rdkit" if rdkit_version is None else "rdkit=={}".format(rdkit_version)])
+    subprocess.check_call(
+        [
+            os.path.join(conda_path, "bin", "conda"),
+            "install",
+            "--yes",
+            "-c",
+            "rdkit",
+            # "python=={}".format(python_version),
+            "rdkit" if rdkit_version is None else "rdkit=={}".format(rdkit_version),
+        ]
+    )
     logger.info("done")
 
     import rdkit
+
     logger.info("rdkit-{} installation finished!".format(rdkit.__version__))
