@@ -21,6 +21,8 @@ def calc_208descriptors(smiles):
         for d in calc.CalcDescriptors(mol):
             row.append(d)
         matrix.append(row)
+        if len(matrix)%100 == 0:
+            print("{} smiles processed in calc_208descriptors...".format(len(matrix)))
 
     return pd.DataFrame(matrix, columns=desc_names)
 
@@ -40,4 +42,7 @@ def calc_400descriptors(smiles):
             row.append(getattr(Descriptors, desc_name)(mol))
             desc_names.append(desc_name)
         matrix.append(row)
+        if len(matrix)%100 == 0:
+            print("{} smiles processed in calc_400descriptors...".format(len(matrix)))
+
     return pd.DataFrame(matrix, columns=desc_names)
