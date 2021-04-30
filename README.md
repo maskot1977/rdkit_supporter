@@ -1,6 +1,6 @@
 # rdkit_installer
 
-[![Build Status](https://travis-ci.com/maskot1977/rdkit_installer.svg?branch=main)](https://travis-ci.com/github/maskot1977/rdkit_installer/)
+[![Build Status](https://travis-ci.com/maskot1977/rdkit_installer.svg?branch=aster)](https://travis-ci.com/github/maskot1977/rdkit_installer/)
 
 On Google Colaboratory:
 
