@@ -12,12 +12,19 @@ class TableCleaner:
         X = pd.DataFrame(X)
         Y = pd.DataFrame(Y)
         self.success_col = []
-        for i in range(X.shape[1]):
+
+        cols = [i for i in range(X.shape[1])]
+        waiting = [cols]
+        while len(waiting) > 0:
+            cols = waiting.pop()
             try:
-                self.model.fit(X.iloc[:, [i]], Y.values.ravel())
-                self.success_col.append(i)
+                self.model.fit(X.iloc[:, cols], Y.values.ravel())
+                self.success_col += cols
             except:
-                continue
+                if len(cols) > 2:
+                    waiting.append(cols[: int(len(cols) / 2)])
+                    waiting.append(cols[int(len(cols) / 2) :])
+
         return self.success_col
 
     def clean_rows(self, X, Y=None):
