@@ -7,6 +7,6 @@ def rf_feature_importances(model, X, topnum=10):
         (fi, name) for fi, name in zip(model.feature_importances_, X.columns)
     ]
     importances = sorted(importances)[-topnum:]
-    plt.barh([x[1] for x in importances], [x[0] for x in importances])
+    plt.barh([str(x[1]) for x in importances], [x[0] for x in importances])
     plt.grid()
     plt.show()
