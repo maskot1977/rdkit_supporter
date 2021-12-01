@@ -69,6 +69,7 @@ class Fingerprinter:
         self.all_bit_info_keys = {}
         self.mols = []
 
+    @property
     def names(self):
         return self.binaryfp_names + self.countfp_names
 
