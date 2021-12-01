@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 class TableCleaner:
     def __init__(self):
-        self.model = RandomForestRegressor(n_estimators=3, n_jobs=-1)
+        self.model = RandomForestRegressor(n_estimators=1, max_depth=1, n_jobs=-1)
         self.success_col = None
         self.success_row = None
 
