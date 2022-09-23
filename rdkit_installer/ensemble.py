@@ -159,6 +159,7 @@ class SmilesBaggingMLP:
                                     self.Y_df.iloc[:, selected_col_copy].mean(axis=1))
                 else:
                     print(data_df[self.target_col])
+                    print(self.Y_df.iloc[:, selected_col_copy])
                     print(self.Y_df.iloc[:, selected_col_copy].mode(axis=1))
                     score = balanced_accuracy_score(
                                     data_df[self.target_col],
