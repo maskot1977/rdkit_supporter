@@ -29,6 +29,7 @@ def calc_208descriptors(smiles):
 
 def calc_400descriptors(smiles):
     matrix = []
+    desc_names = []
     for smile in smiles:
         row = []
         mol = Chem.MolFromSmiles(smile)
