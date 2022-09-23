@@ -164,7 +164,13 @@ class SmilesBaggingMLP:
             print("ensemble ", len(selected_col), "models,")
             print(list(self.Y_df.iloc[:, selected_col].columns))
 
-        return (
-            self.Y_df.iloc[:, self.selected_col].mean(axis=1).values,
-            self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
-        )
+        if self.estimator == MLPRegressor:
+            return (
+                self.Y_df.iloc[:, self.selected_col].mean(axis=1).values,
+                self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
+            )
+        else:
+            return (
+                self.Y_df.iloc[:, self.selected_col].mode(axis=1).values,
+                self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
+            )
