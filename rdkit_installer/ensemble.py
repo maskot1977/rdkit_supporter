@@ -160,7 +160,8 @@ class SmilesBaggingMLP:
                 else:
                     score = f1_score(
                                     data_df[self.target_col],
-                                    self.Y_df.iloc[:, selected_col_copy].mode(axis=1))                    
+                                    self.Y_df.iloc[:, selected_col_copy].mode(axis=1),
+                                    average='micro')                    
                 
                 if best_score < score:
                     best_score = score
