@@ -154,12 +154,13 @@ class SmilesBaggingMLP:
                 selected_col_copy = [x for x in selected_col]
                 selected_col_copy.append(i)
                 if self.estimator == MLPRegressor:
-                    score_metrics = r2_score
-                else:
-                    score_metrics = f1_score
-                score = score_metrics(
+                    score = r2_score(
                                     data_df[self.target_col],
                                     self.Y_df.iloc[:, selected_col_copy].mean(axis=1))
+                else:
+                    score = f1_score(
+                                    data_df[self.target_col],
+                                    self.Y_df.iloc[:, selected_col_copy].mode(axis=1))                    
                 
                 if best_score < score:
                     best_score = score
