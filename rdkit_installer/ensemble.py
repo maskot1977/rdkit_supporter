@@ -130,6 +130,7 @@ class SmilesBaggingMLP:
                 )
 
             for score, model, columns, fp_type in sorted(self.models, reverse=True):
+                print(score, model, columns)
 
                 try:
                     Y = model.predict(X_df[fp_type][columns])
