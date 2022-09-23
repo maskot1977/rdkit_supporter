@@ -163,7 +163,7 @@ class SmilesBaggingMLP:
                     print(self.Y_df.iloc[:, selected_col_copy].dropna(axis=0).mode(axis=1))
                     score = balanced_accuracy_score(
                                     data_df[self.target_col],
-                                    self.Y_df.iloc[:, selected_col_copy].dropna(axis=0).mode(axis=1))                    
+                                    self.Y_df.iloc[:, selected_col_copy].mode(axis=1)[0])                    
                 
                 if best_score < score:
                     best_score = score
