@@ -70,7 +70,6 @@ class SmilesBaggingMLP:
             score = model.score(X_df, bagged_data[self.target_col])
             if score == 1.0:
                 score += random.random() * 1e-8
-            print(score, model)
             if score >= recording_threshold:
                 with open(
                     "{}model_{}.pkl".format(trained_model_path, score), "wb"
@@ -130,8 +129,6 @@ class SmilesBaggingMLP:
                 )
 
             for score, model, columns, fp_type in sorted(self.models, reverse=True):
-                print(score, model, columns)
-
                 try:
                     Y = model.predict(X_df[fp_type][columns])
                 except KeyError:
