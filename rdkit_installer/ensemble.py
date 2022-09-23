@@ -9,7 +9,7 @@ import pandas as pd
 from rdkit_installer import preprocess
 from rdkit_installer.descriptors import calc_descriptors
 from rdkit_installer.fingerprints import Fingerprinter
-from sklearn.metrics import r2_score, f1_score
+from sklearn.metrics import r2_score, balanced_accuracy_score
 from sklearn.neural_network import MLPRegressor, MLPClassifier
 
 
@@ -158,10 +158,9 @@ class SmilesBaggingMLP:
                                     data_df[self.target_col],
                                     self.Y_df.iloc[:, selected_col_copy].mean(axis=1))
                 else:
-                    score = f1_score(
+                    score = balanced_accuracy_score(
                                     data_df[self.target_col],
-                                    self.Y_df.iloc[:, selected_col_copy].mode(axis=1),
-                                    average='micro')                    
+                                    self.Y_df.iloc[:, selected_col_copy].mode(axis=1))                    
                 
                 if best_score < score:
                     best_score = score
