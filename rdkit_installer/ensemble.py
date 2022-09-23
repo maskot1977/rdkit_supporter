@@ -104,6 +104,7 @@ class SmilesBaggingMLP:
         while True:
             start_sample = iter * self.n_samples
             finish_sample = (iter + 1) * self.n_samples
+            print(finish_sample)
             if start_sample > data_df.shape[0]:
                 break
             if finish_sample > data_df.shape[0]:
