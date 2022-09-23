@@ -158,9 +158,9 @@ class SmilesBaggingMLP:
                                     data_df[self.target_col],
                                     self.Y_df.iloc[:, selected_col_copy].mean(axis=1))
                 else:
-                    print(data_df[self.target_col])
-                    print(self.Y_df.iloc[:, selected_col_copy])
-                    print(self.Y_df.iloc[:, selected_col_copy].dropna(axis=0).mode(axis=1))
+                    #print(data_df[self.target_col])
+                    #print(self.Y_df.iloc[:, selected_col_copy])
+                    #print(self.Y_df.iloc[:, selected_col_copy].dropna(axis=0).mode(axis=1))
                     score = balanced_accuracy_score(
                                     data_df[self.target_col],
                                     self.Y_df.iloc[:, selected_col_copy].mode(axis=1)[0])                    
@@ -180,6 +180,6 @@ class SmilesBaggingMLP:
             )
         else:
             return (
-                self.Y_df.iloc[:, self.selected_col].mode(axis=1).values,
+                self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
                 self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
             )
