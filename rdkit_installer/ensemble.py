@@ -2,8 +2,8 @@ import glob
 import os
 import pickle
 import random
-import warnings
-warnings.filterwarnings("error")
+#import warnings
+#warnings.filterwarnings("error")
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,11 +16,12 @@ from sklearn.neural_network import MLPRegressor, MLPClassifier
 
 
 class SmilesBaggingMLP:
-    def __init__(self, smiles_col, target_col, n_samples=1000, estimator=MLPRegressor):
+    def __init__(self, smiles_col, target_col, n_samples=1000, estimator=MLPRegressor, n_class=None):
         self.smiles_col = smiles_col
         self.target_col = target_col
         self.n_samples = n_samples
         self.estimator = estimator
+        self.n_class = n_class
 
     def train(self, data_df, trained_model_path, max_trial=10, recording_threshold=0.9):
         for trial in range(max_trial):
@@ -68,6 +69,8 @@ class SmilesBaggingMLP:
                 activation=random.choice(["logistic", "tanh", "relu"]),
                 early_stopping=random.choice([True, False]),
             )
+            if self.n_class is not None an self.n_class != len(set(bagged_data[self.target_col])):
+                continue
             try:
                 model.fit(X_df, bagged_data[self.target_col])
                 if self.estimator == MLPRegressor:
