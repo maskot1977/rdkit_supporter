@@ -202,7 +202,7 @@ class SmilesBaggingMLP:
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     score = balanced_accuracy_score(
                         self.Y_df.iloc[:, np.where(rand_columns > tmp_x / 10, True, False)].mode(axis=1)[0].values, 
-                        data_df.iloc[self.target_col].values.T
+                        data_df[self.target_col].values.T
                     )
                     if best_score < score:
                         best_score = score
