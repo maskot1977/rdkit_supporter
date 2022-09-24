@@ -200,14 +200,17 @@ class SmilesBaggingMLP:
                 best_score = 0
                 for tmp_x in range(1, 100):
                     rand_columns = np.random.rand(self.Y_df.shape[1])
-                    score = balanced_accuracy_score(
-                        self.Y_df.iloc[:, np.where(rand_columns > tmp_x / 100, True, False)].mode(axis=1)[0].values, 
-                        data_df[self.target_col].values.T
-                    )
-                    print(tmp_x, score)
-                    if best_score < score:
-                        best_score = score
-                        self.selected_col = rand_columns
+                    try:
+                        score = balanced_accuracy_score(
+                            self.Y_df.iloc[:, np.where(rand_columns > tmp_x / 100, True, False)].mode(axis=1)[0].values, 
+                            data_df[self.target_col].values.T
+                        )
+                        print(tmp_x, score)
+                        if best_score <= score:
+                            best_score = score
+                            self.selected_col = rand_columns
+                    except:
+                        pass
             return (
                 self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
                 self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
