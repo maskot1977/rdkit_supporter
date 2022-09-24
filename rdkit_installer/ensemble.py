@@ -162,41 +162,51 @@ class SmilesBaggingMLP:
 
         self.Y_df = Y_df.dropna(axis=1)
 
-        if tuning:
-            selected_col = []
-            best_score = 0
-            for i in range(self.Y_df.shape[1]):
-                selected_col_copy = [x for x in selected_col]
-                selected_col_copy.append(i)
-                if self.estimator == MLPRegressor:
-                    score = r2_score(
-                                    data_df[self.target_col],
-                                    self.Y_df.iloc[:, selected_col_copy].mean(axis=1))
-                else:
-                    #print(data_df[self.target_col])
-                    #print(self.Y_df.iloc[:, selected_col_copy])
-                    #print(self.Y_df.iloc[:, selected_col_copy].dropna(axis=0).mode(axis=1))
-                    try:
-                        score = balanced_accuracy_score(
-                                        data_df[self.target_col],
-                                        self.Y_df.iloc[:, selected_col_copy].mode(axis=1)[0])    
-                    except RuntimeWarning:
-                        score = 0
-
-                if best_score < score:
-                    best_score = score
-                    selected_col = selected_col_copy
-
-            self.selected_col = selected_col
-            print("ensemble ", len(selected_col), "models,")
-            print(list(self.Y_df.iloc[:, selected_col].columns))
-
         if self.estimator == MLPRegressor:
+            if tuning:
+                selected_col = []
+                best_score = 0
+                for i in range(self.Y_df.shape[1]):
+                    selected_col_copy = [x for x in selected_col]
+                    selected_col_copy.append(i)
+                    if self.estimator == MLPRegressor:
+                        score = r2_score(
+                                        data_df[self.target_col],
+                                        self.Y_df.iloc[:, selected_col_copy].mean(axis=1))
+                    else:
+                        #print(data_df[self.target_col])
+                        #print(self.Y_df.iloc[:, selected_col_copy])
+                        #print(self.Y_df.iloc[:, selected_col_copy].dropna(axis=0).mode(axis=1))
+                        try:
+                            score = balanced_accuracy_score(
+                                            data_df[self.target_col],
+                                            self.Y_df.iloc[:, selected_col_copy].mode(axis=1)[0])    
+                        except RuntimeWarning:
+                            score = 0
+
+                    if best_score < score:
+                        best_score = score
+                        selected_col = selected_col_copy
+
+                self.selected_col = selected_col
+                print("ensemble ", len(selected_col), "models,")
+                print(list(self.Y_df.iloc[:, selected_col].columns))
             return (
                 self.Y_df.iloc[:, self.selected_col].mean(axis=1).values,
                 self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
             )
         else:
+            if tuning:
+                best_score = 0
+                for tmp_x in range(1, 10):
+                    rand_columns = np.random.rand(self.Y_df.shape[1])
+                    score = balanced_accuracy_score(
+                        self.Y_df.iloc[:, np.where(rand_columns > tmp_x / 10, True, False)].mode(axis=1)[0].values, 
+                        data_df.iloc[np.where(rand_indices > 0.9, True, False), :][self.target_col].values.T
+                    )
+                    if best_score < score:
+                        best_score = score
+                        self.selected_col = rand_columns
             return (
                 self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
                 self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
