@@ -2,6 +2,8 @@ import glob
 import os
 import pickle
 import random
+import warnings
+warnings.filterwarnings("error")
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -168,7 +170,7 @@ class SmilesBaggingMLP:
                         score = balanced_accuracy_score(
                                         data_df[self.target_col],
                                         self.Y_df.iloc[:, selected_col_copy].mode(axis=1)[0])    
-                    except UserWarning:
+                    except RuntimeWarning:
                         score = 0
 
                 if best_score < score:
