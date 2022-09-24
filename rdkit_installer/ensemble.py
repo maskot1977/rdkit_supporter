@@ -68,13 +68,13 @@ class SmilesBaggingMLP:
                 activation=random.choice(["logistic", "tanh", "relu"]),
                 early_stopping=random.choice([True, False]),
             )
-            model.fit(X_df, bagged_data[self.target_col])
-            if self.estimator == MLPRegressor:
-                score = model.score(X_df, bagged_data[self.target_col])
-            else:
-                try:
+            try:
+                model.fit(X_df, bagged_data[self.target_col])
+                if self.estimator == MLPRegressor:
+                    score = model.score(X_df, bagged_data[self.target_col])
+                else:
                     score = balanced_accuracy_score(model.predict(X_df), bagged_data[self.target_col])
-                except RuntimeWarning:
+            except RuntimeWarning:
                     score = 0
                     
             if score == 1.0:
