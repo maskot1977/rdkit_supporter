@@ -55,7 +55,7 @@ class SmilesBaggingMLP:
             X_df = X_df.iloc[:, colids]
             X_df = preprocess.remove_high_correlation_features(X_df, threshold=0.95)
 
-            print(name_x)
+            print(trial, name_x)
             model = self.estimator(
                 hidden_layer_sizes=random.choice(
                     [
