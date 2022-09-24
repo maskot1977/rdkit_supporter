@@ -204,6 +204,7 @@ class SmilesBaggingMLP:
                         self.Y_df.iloc[:, np.where(rand_columns > tmp_x / 100, True, False)].mode(axis=1)[0].values, 
                         data_df[self.target_col].values.T
                     )
+                    print(tmp_x, score)
                     if best_score < score:
                         best_score = score
                         self.selected_col = rand_columns
