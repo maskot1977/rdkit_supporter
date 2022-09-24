@@ -67,7 +67,10 @@ class SmilesBaggingMLP:
                 early_stopping=random.choice([True, False]),
             )
             model.fit(X_df, bagged_data[self.target_col])
-            score = model.score(X_df, bagged_data[self.target_col])
+            if self.estimator == MLPRegressor:
+                score = model.score(X_df, bagged_data[self.target_col])
+            else:
+                score = balanced_accuracy_score(model.predict(X_df), bagged_data[self.target_col])
             if score == 1.0:
                 score += random.random() * 1e-8
             if score >= recording_threshold:
