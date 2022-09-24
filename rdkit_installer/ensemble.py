@@ -71,14 +71,17 @@ class SmilesBaggingMLP:
             )
             if self.n_class is not None and self.n_class != len(set(bagged_data[self.target_col])):
                 continue
-            try:
-                model.fit(X_df, bagged_data[self.target_col])
-                if self.estimator == MLPRegressor:
-                    score = model.score(X_df, bagged_data[self.target_col])
-                else:
-                    score = balanced_accuracy_score(model.predict(X_df), bagged_data[self.target_col])
-            except: # UserWarning: #RuntimeWarning:
-                continue
+                
+            model.fit(X_df, bagged_data[self.target_col])
+            if self.estimator == MLPRegressor:
+                score = model.score(X_df, bagged_data[self.target_col])
+            else:
+                y_pred = model.predict(X_df)
+                y_true = bagged_data[self.target_col]
+                if len(set(y_pred)) != len(set(y_true)):
+                    continue
+                score = balanced_accuracy_score(y_pred, y_true)
+
                     
             if score == 1.0:
                 score += random.random() * 1e-8
