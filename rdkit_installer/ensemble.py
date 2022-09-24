@@ -198,10 +198,10 @@ class SmilesBaggingMLP:
         else:
             if tuning:
                 best_score = 0
-                for tmp_x in range(1, 10):
+                for tmp_x in range(1, 100):
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     score = balanced_accuracy_score(
-                        self.Y_df.iloc[:, np.where(rand_columns > tmp_x / 10, True, False)].mode(axis=1)[0].values, 
+                        self.Y_df.iloc[:, np.where(rand_columns > tmp_x / 100, True, False)].mode(axis=1)[0].values, 
                         data_df[self.target_col].values.T
                     )
                     if best_score < score:
