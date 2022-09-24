@@ -75,7 +75,7 @@ class SmilesBaggingMLP:
                 else:
                     score = balanced_accuracy_score(model.predict(X_df), bagged_data[self.target_col])
             except RuntimeWarning:
-                    score = 0
+                continue
                     
             if score == 1.0:
                 score += random.random() * 1e-8
