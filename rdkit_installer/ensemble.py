@@ -74,7 +74,7 @@ class SmilesBaggingMLP:
                     score = model.score(X_df, bagged_data[self.target_col])
                 else:
                     score = balanced_accuracy_score(model.predict(X_df), bagged_data[self.target_col])
-            except UserWarning: #RuntimeWarning:
+            except: # UserWarning: #RuntimeWarning:
                 continue
                     
             if score == 1.0:
