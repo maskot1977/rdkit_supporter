@@ -69,7 +69,7 @@ class SmilesBaggingMLP:
                 activation=random.choice(["logistic", "tanh", "relu"]),
                 early_stopping=random.choice([True, False]),
             )
-            if self.n_class is not None an self.n_class != len(set(bagged_data[self.target_col])):
+            if self.n_class is not None and self.n_class != len(set(bagged_data[self.target_col])):
                 continue
             try:
                 model.fit(X_df, bagged_data[self.target_col])
