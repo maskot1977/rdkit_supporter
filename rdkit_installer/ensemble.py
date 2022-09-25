@@ -111,7 +111,7 @@ class SmilesBaggingMLP:
                     columns = pickle.load(f)
                 self.models.append([score, model, columns["columns"], columns["type"]])
 
-    def predict(self, data_df, specify_col=None, iterate=False):
+    def predict(self, data_df, specify_col=None, iterate=True):
         return self.tune_predict(data_df, tuning=False, specify_col=specify_col, iterate=iterate)
 
     def tune_predict(self, data_df, tuning=True, specify_col=None, iterate=False):
