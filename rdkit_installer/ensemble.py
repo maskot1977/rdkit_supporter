@@ -228,7 +228,10 @@ class SmilesBaggingMLP:
                     print(s, selected_col)
                     predicted = self.Y_df.iloc[:, selected_col].mode(axis=1).values[:, 0]
                     if predicted.var() != 0:
-                        break
+                        return (
+                            self.Y_df.iloc[:, selected_col].mode(axis=1).values[:, 0],
+                            self.Y_df.iloc[:, selected_col].std(axis=1).values,
+                        )
                         
                
             return (
