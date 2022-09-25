@@ -111,10 +111,10 @@ class SmilesBaggingMLP:
                     columns = pickle.load(f)
                 self.models.append([score, model, columns["columns"], columns["type"]])
 
-    def predict(self, data_df, specify_col=None):
-        return self.tune_predict(data_df, tuning=False, specify_col=specify_col)
+    def predict(self, data_df, specify_col=None, iterate=False):
+        return self.tune_predict(data_df, tuning=False, specify_col=specify_col, iterate=iterate)
 
-    def tune_predict(self, data_df, tuning=True, specify_col=None):
+    def tune_predict(self, data_df, tuning=True, specify_col=None, iterate=False):
         Y_df = pd.DataFrame([])
         iter = 0
         while True:
@@ -215,13 +215,23 @@ class SmilesBaggingMLP:
                             self.selected_col = copy.deepcopy(selected_col)
                     except:
                         pass
-            if specify_col is None:
-                return (
-                    self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
-                    self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
-                )
-            else:
+            if specify_col is not None:
                 return (
                     self.Y_df.iloc[:, specify_col].mode(axis=1).values[:, 0],
                     self.Y_df.iloc[:, specify_col].std(axis=1).values,
                 )
+            
+
+            
+            if iterate:
+                for s, selected_col in sorted(self.selected_cols, reverse=True, key=lambda x:x[0]):
+                    print(s, selected_col)
+                    predicted = self.Y_df.iloc[:, selected_col].mode(axis=1).values[:, 0]
+                    if predicted.var() != 0:
+                        break
+                        
+               
+            return (
+                self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
+                self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
+            )
