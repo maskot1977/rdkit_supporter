@@ -2,6 +2,7 @@ import glob
 import os
 import pickle
 import random
+import copy
 #import warnings
 #warnings.filterwarnings("error")
 
@@ -208,7 +209,7 @@ class SmilesBaggingMLP:
                         print(tmp_x, score)
                         if best_score <= score:
                             best_score = score
-                            self.selected_col = rand_columns
+                            self.selected_col = copy.deepcopy(rand_columns)
                     except:
                         pass
             return (
