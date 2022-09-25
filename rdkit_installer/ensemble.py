@@ -111,10 +111,10 @@ class SmilesBaggingMLP:
                     columns = pickle.load(f)
                 self.models.append([score, model, columns["columns"], columns["type"]])
 
-    def predict(self, data_df):
-        return self.tune_predict(data_df, tuning=False)
+    def predict(self, data_df, specify_col=None):
+        return self.tune_predict(data_df, tuning=False, specify_col=specify_col)
 
-    def tune_predict(self, data_df, tuning=True):
+    def tune_predict(self, data_df, tuning=True, specify_col=None):
         Y_df = pd.DataFrame([])
         iter = 0
         while True:
@@ -198,6 +198,7 @@ class SmilesBaggingMLP:
             )
         else:
             if tuning:
+                self.selected_cols = []
                 best_score = 0
                 for tmp_x in range(1, 100):
                     rand_columns = np.random.rand(self.Y_df.shape[1])
@@ -208,12 +209,19 @@ class SmilesBaggingMLP:
                             data_df[self.target_col].values.T
                         )
                         print(tmp_x, score)
+                        self.selected_cols.append([score, selected_col])
                         if best_score <= score:
                             best_score = score
                             self.selected_col = copy.deepcopy(selected_col)
                     except:
                         pass
-            return (
-                self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
-                self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
-            )
+            if specify_col is None:
+                return (
+                    self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
+                    self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
+                )
+            else:
+                return (
+                    self.Y_df.iloc[:, specify_col].mode(axis=1).values[:, 0],
+                    self.Y_df.iloc[:, specify_col].std(axis=1).values,
+                )
