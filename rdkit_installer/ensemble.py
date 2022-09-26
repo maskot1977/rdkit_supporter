@@ -166,7 +166,7 @@ class SmilesBaggingMLP:
         if self.estimator == MLPRegressor:
             if tuning:
                 self.selected_cols = []
-                best_score = 0
+                best_score = None
                 for tmp_x in range(1, 100):
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     selected_col = np.where(rand_columns > tmp_x / 100, True, False)
@@ -177,7 +177,7 @@ class SmilesBaggingMLP:
                         )
                         print(tmp_x, score)
                         self.selected_cols.append([score, selected_col])
-                        if best_score <= score:
+                        if best_score is None or best_score <= score:
                             best_score = score
                             self.selected_col = copy.deepcopy(selected_col)
                     except:
