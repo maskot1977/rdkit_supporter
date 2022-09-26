@@ -165,25 +165,24 @@ class SmilesBaggingMLP:
 
         if self.estimator == MLPRegressor:
             if tuning:
-                selected_col = []
+                self.selected_cols = []
                 best_score = 0
-                for i in range(self.Y_df.shape[1]):
-                    selected_col_copy = [x for x in selected_col]
-                    selected_col_copy.append(i)
+                for tmp_x in range(1, 100):
+                    rand_columns = np.random.rand(self.Y_df.shape[1])
+                    selected_col = np.where(rand_columns > tmp_x / 100, True, False)
                     try:
                         score = r2_score(
-                                        data_df[self.target_col],
-                                        self.Y_df.iloc[:, selected_col_copy].dropna(axis=1).mean(axis=1))
+                            data_df[self.target_col],
+                            self.Y_df.iloc[:, selected_col].dropna(axis=1).mean(axis=1)
+                        )
+                        print(tmp_x, score)
+                        self.selected_cols.append([score, selected_col])
+                        if best_score <= score:
+                            best_score = score
+                            self.selected_col = copy.deepcopy(selected_col)
                     except:
-                        continue
-
-                    if best_score < score:
-                        best_score = score
-                        selected_col = selected_col_copy
-
-                self.selected_col = selected_col
-                print("ensemble ", len(selected_col), "models,")
-                print(list(self.Y_df.iloc[:, selected_col].columns))
+                        pass
+                    
             return (
                 self.Y_df.iloc[:, self.selected_col].mean(axis=1).values,
                 self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
