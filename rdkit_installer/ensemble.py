@@ -225,7 +225,7 @@ class SmilesBaggingMLP:
             
             if iterate:
                 for s, selected_col in sorted(self.selected_cols, reverse=True, key=lambda x:x[0]):
-                    print(s, selected_col)
+                    print(s)
                     predicted = self.Y_df.iloc[:, selected_col].mode(axis=1).values[:, 0]
                     if predicted.var() != 0:
                         return (
