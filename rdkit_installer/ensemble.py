@@ -173,7 +173,7 @@ class SmilesBaggingMLP:
                     if self.estimator == MLPRegressor:
                         score = r2_score(
                                         data_df[self.target_col],
-                                        self.Y_df.iloc[:, selected_col_copy].mean(axis=1))
+                                        self.Y_df.iloc[:, selected_col_copy].dropna(axis=1).mean(axis=1))
                     else:
                         #print(data_df[self.target_col])
                         #print(self.Y_df.iloc[:, selected_col_copy])
