@@ -170,20 +170,12 @@ class SmilesBaggingMLP:
                 for i in range(self.Y_df.shape[1]):
                     selected_col_copy = [x for x in selected_col]
                     selected_col_copy.append(i)
-                    if self.estimator == MLPRegressor:
+                    try:
                         score = r2_score(
                                         data_df[self.target_col],
                                         self.Y_df.iloc[:, selected_col_copy].dropna(axis=1).mean(axis=1))
-                    else:
-                        #print(data_df[self.target_col])
-                        #print(self.Y_df.iloc[:, selected_col_copy])
-                        #print(self.Y_df.iloc[:, selected_col_copy].dropna(axis=0).mode(axis=1))
-                        try:
-                            score = balanced_accuracy_score(
-                                            data_df[self.target_col],
-                                            self.Y_df.iloc[:, selected_col_copy].mode(axis=1)[0])    
-                        except RuntimeWarning:
-                            score = 0
+                    except:
+                        continue
 
                     if best_score < score:
                         best_score = score
