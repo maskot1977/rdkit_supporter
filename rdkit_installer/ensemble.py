@@ -194,7 +194,7 @@ class SmilesBaggingMLP:
         else:
             if tuning:
                 self.selected_cols = []
-                best_score = 0
+                best_score = None
                 for tmp_x in range(1, 100):
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     selected_col = np.where(rand_columns > tmp_x / 100, True, False)
@@ -203,9 +203,9 @@ class SmilesBaggingMLP:
                             self.Y_df.iloc[:, selected_col].mode(axis=1)[0].values, 
                             data_df[self.target_col].values.T
                         )
-                        print(tmp_x, score)
+                        print(tmp_x, score, selected_col)
                         self.selected_cols.append([score, selected_col])
-                        if best_score <= score:
+                        if best_score is None or best_score <= score:
                             best_score = score
                             self.selected_col = copy.deepcopy(selected_col)
                     except:
