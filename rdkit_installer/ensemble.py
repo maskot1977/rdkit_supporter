@@ -23,7 +23,7 @@ class SmilesBaggingMLP:
         self.n_samples = n_samples
         self.estimator = estimator
         self.n_class = n_class
-
+        
     def train(self, data_df, trained_model_path, max_trial=10, recording_threshold=0.9):
         for trial in range(max_trial):
             indexs = random.choices(range(data_df.shape[0]), k=self.n_samples)
@@ -235,7 +235,7 @@ class SmilesBaggingMLP:
             )
 
  
- def digitalize(Y_mean, theta_0=0.5, theta_1=1.5):
+def digitalize(Y_mean, theta_0=0.5, theta_1=1.5):
     ary = []
     for x in Y_mean:
         if x <= theta_0:
