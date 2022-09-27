@@ -12,7 +12,7 @@ import pandas as pd
 from rdkit_installer import preprocess
 from rdkit_installer.descriptors import calc_descriptors
 from rdkit_installer.fingerprints import Fingerprinter
-from sklearn.metrics import r2_score, balanced_accuracy_score
+from sklearn.metrics import r2_score, balanced_accuracy_score, cohen_kappa_score
 from sklearn.neural_network import MLPRegressor, MLPClassifier
 
 
@@ -81,7 +81,7 @@ class SmilesBaggingMLP:
                 y_true = bagged_data[self.target_col]
                 if len(set(y_pred)) != len(set(y_true)):
                     continue
-                score = balanced_accuracy_score(y_pred, y_true)
+                score = cohen_kappa_score(y_pred, y_true)
 
                     
             if score == 1.0:
@@ -171,7 +171,7 @@ class SmilesBaggingMLP:
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     selected_col = np.where(rand_columns > tmp_x / 100, True, False)
                     try:
-                        score = balanced_accuracy_score(
+                        score = cohen_kappa_score(
                             digitalize(data_df[self.target_col]),
                             digitalize(self.Y_df.iloc[:, selected_col].dropna(axis=1).mean(axis=1))
                         )
@@ -199,7 +199,7 @@ class SmilesBaggingMLP:
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     selected_col = np.where(rand_columns > tmp_x / 100, True, False)
                     try:
-                        score = balanced_accuracy_score(
+                        score = cohen_kappa_score(
                             self.Y_df.iloc[:, selected_col].mode(axis=1)[0].values, 
                             data_df[self.target_col].values.T
                         )
