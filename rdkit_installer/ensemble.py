@@ -199,11 +199,12 @@ class SmilesBaggingMLP:
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     selected_col = np.where(rand_columns > tmp_x / 100, True, False)
                     try:
+                        pred_values = self.Y_df.iloc[:, selected_col].mode(axis=1)[0].values
                         score = cohen_kappa_score(
-                            self.Y_df.iloc[:, selected_col].mode(axis=1)[0].values, 
+                            pred_values, 
                             data_df[self.target_col].values.T
                         )
-                        print(tmp_x, score, selected_col)
+                        print(tmp_x, score, selected_col, pred_values)
                         self.selected_cols.append([score, selected_col])
                         if best_score is None or best_score <= score:
                             best_score = score
