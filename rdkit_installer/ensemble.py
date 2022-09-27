@@ -171,10 +171,14 @@ class SmilesBaggingMLP:
                     rand_columns = np.random.rand(self.Y_df.shape[1])
                     selected_col = np.where(rand_columns > tmp_x / 100, True, False)
                     try:
-                        score = r2_score(
-                            data_df[self.target_col],
-                            self.Y_df.iloc[:, selected_col].dropna(axis=1).mean(axis=1)
+                        score = balanced_accuracy_score(
+                            digitalize(data_df[self.target_col]),
+                            digitalize(self.Y_df.iloc[:, selected_col].dropna(axis=1).mean(axis=1))
                         )
+                        #score = r2_score(
+                        #    data_df[self.target_col],
+                        #    self.Y_df.iloc[:, selected_col].dropna(axis=1).mean(axis=1)
+                        #)
                         print(tmp_x, score)
                         self.selected_cols.append([score, selected_col])
                         if best_score is None or best_score <= score:
@@ -229,3 +233,15 @@ class SmilesBaggingMLP:
                 self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
                 self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
             )
+
+ 
+ def digitalize(Y_mean, theta_0=0.5, theta_1=1.5):
+    ary = []
+    for x in Y_mean:
+        if x <= theta_0:
+            ary.append(0)
+        elif x <= theta_1:
+            ary.append(1)
+        else:
+            ary.append(2)
+    return np.array(ary)
