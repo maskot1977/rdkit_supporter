@@ -112,9 +112,6 @@ class SmilesBaggingMLP:
                 self.models.append([score, model, columns["columns"], columns["type"]])
 
     def predict(self, data_df, specify_col=None, iterate=True):
-        return self.tune_predict(data_df, tuning=False, specify_col=specify_col, iterate=iterate)
-
-    def tune_predict(self, data_df, tuning=True, specify_col=None, iterate=False):
         Y_df = pd.DataFrame([])
         iter = 0
         while True:
@@ -161,79 +158,8 @@ class SmilesBaggingMLP:
             Y_df = pd.concat([Y_df, y_df], ignore_index=True)
             iter += 1
 
-        self.Y_df = Y_df #.dropna(axis=1)
-
-        if self.estimator == MLPRegressor:
-            if tuning:
-                self.selected_cols = []
-                best_score = None
-                for tmp_x in range(1, 100):
-                    rand_columns = np.random.rand(self.Y_df.shape[1])
-                    selected_col = np.where(rand_columns > tmp_x / 100, True, False)
-                    try:
-                        score = cohen_kappa_score(
-                            digitalize(data_df[self.target_col]),
-                            digitalize(self.Y_df.iloc[:, selected_col].dropna(axis=1).mean(axis=1))
-                        )
-                        #score = r2_score(
-                        #    data_df[self.target_col],
-                        #    self.Y_df.iloc[:, selected_col].dropna(axis=1).mean(axis=1)
-                        #)
-                        print(tmp_x, score)
-                        self.selected_cols.append([score, selected_col])
-                        if best_score is None or best_score <= score:
-                            best_score = score
-                            self.selected_col = copy.deepcopy(selected_col)
-                    except:
-                        pass
-                    
-            return (
-                self.Y_df.iloc[:, self.selected_col].mean(axis=1).values,
-                self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
-            )
-        else:
-            if tuning:
-                self.selected_cols = []
-                best_score = None
-                for tmp_x in range(1, 100):
-                    rand_columns = np.random.rand(self.Y_df.shape[1])
-                    selected_col = np.where(rand_columns > tmp_x / 100, True, False)
-                    try:
-                        pred_values = self.Y_df.iloc[:, selected_col].mode(axis=1)[0].values
-                        score = cohen_kappa_score(
-                            pred_values, 
-                            data_df[self.target_col].values.T
-                        )
-                        print(tmp_x, score, selected_col, pred_values)
-                        self.selected_cols.append([score, selected_col])
-                        if best_score is None or best_score <= score:
-                            best_score = score
-                            self.selected_col = copy.deepcopy(selected_col)
-                    except:
-                        pass
-            if specify_col is not None:
-                return (
-                    self.Y_df.iloc[:, specify_col].mode(axis=1).values[:, 0],
-                    self.Y_df.iloc[:, specify_col].std(axis=1).values,
-                )
-            
-
-            
-            if iterate:
-                for s, selected_col in sorted(self.selected_cols, reverse=True, key=lambda x:x[0]):
-                    print(s)
-                    predicted = self.Y_df.iloc[:, selected_col].mode(axis=1).values[:, 0]
-                    if predicted.var() != 0:
-                        return (
-                            self.Y_df.iloc[:, selected_col].mode(axis=1).values[:, 0],
-                            self.Y_df.iloc[:, selected_col].std(axis=1).values,
-                        )
-                        
-               
-            return (
-                self.Y_df.iloc[:, self.selected_col].mode(axis=1).values[:, 0],
-                self.Y_df.iloc[:, self.selected_col].std(axis=1).values,
-            )
+        self.Y_df = Y_df.dropna(axis=1)
+        return self.Y_df
 
  
 def digitalize(Y_mean, theta_0=0.5, theta_1=1.5):
