@@ -158,7 +158,7 @@ class SmilesBaggingMLP:
             Y_df = pd.concat([Y_df, y_df], ignore_index=True)
             iter += 1
 
-        self.Y_df = Y_df.dropna(axis=1)
+        #self.Y_df = Y_df.dropna(axis=1)
         return self.Y_df
 
  
