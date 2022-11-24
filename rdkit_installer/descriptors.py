@@ -4,7 +4,12 @@ import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 from rdkit.ML.Descriptors import MoleculeDescriptors
+from rdkit.Chem import MolStandardize
+from rdkit.Chem.SaltRemover import SaltRemover
 
+uc = MolStandardize.charge.Uncharger()
+remover = SaltRemover(defnData="[Cl,Br,Na]")
+lfc = MolStandardize.fragment.LargestFragmentChooser()
 
 def calc_descriptors(smiles):
     return calc_400descriptors(smiles)
@@ -18,6 +23,9 @@ def calc_208descriptors(smiles):
     for smile in smiles:
         row = []
         mol = Chem.MolFromSmiles(smile)
+        mol = uc.uncharge(mol)
+        mol = remover.StripMol(mol)
+        mol = lfc.choose(mol)
         for d in calc.CalcDescriptors(mol):
             row.append(d)
         matrix.append(row)
@@ -33,6 +41,9 @@ def calc_400descriptors(smiles):
     for smile in smiles:
         row = []
         mol = Chem.MolFromSmiles(smile)
+        mol = uc.uncharge(mol)
+        mol = remover.StripMol(mol)
+        mol = lfc.choose(mol)
         desc_names = []
         for desc_name in inspect.getmembers(Descriptors, inspect.isfunction):
             desc_name = desc_name[0]
