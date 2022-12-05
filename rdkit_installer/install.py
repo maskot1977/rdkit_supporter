@@ -11,6 +11,15 @@ logger.addHandler(StreamHandler())
 logger.setLevel(INFO)
 
 
+def to_google_colaboratory():
+    !wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    !chmod +x Miniconda3-latest-Linux-x86_64.sh
+    !bash ./Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local
+    !conda install -q -y -c rdkit rdkit python=3.7
+    import sys
+    sys.path.append('/usr/local/lib/python3.7/site-packages/')
+
+    
 def from_miniconda(
     chunk_size=4096,
     file_name="Miniconda3-4.7.12-Linux-x86_64.sh",
