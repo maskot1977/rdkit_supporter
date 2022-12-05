@@ -12,10 +12,10 @@ logger.setLevel(INFO)
 
 
 def to_google_colaboratory():
-    !wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    !chmod +x Miniconda3-latest-Linux-x86_64.sh
-    !bash ./Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local
-    !conda install -q -y -c rdkit rdkit python=3.7
+    subprocess.call("wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh")
+    subprocess.call("chmod +x Miniconda3-latest-Linux-x86_64.sh")
+    subprocess.call("bash ./Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local")
+    subprocess.call("conda install -q -y -c rdkit rdkit python=3.7")
     import sys
     sys.path.append('/usr/local/lib/python3.7/site-packages/')
 
