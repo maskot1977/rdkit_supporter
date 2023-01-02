@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-def rf_feature_importances(model, X, topnum=10):
+def feature_importances(model, X, topnum=10):
     topnum = 10
     importances = [
         (fi, name) for fi, name in zip(model.feature_importances_, X.columns)
