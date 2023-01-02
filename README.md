@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.com/maskot1977/rdkit_installer.svg?branch=aster)](https://travis-ci.com/github/maskot1977/rdkit_installer/)
 
+
+# The following commands have been deprecated
+
 On Google Colaboratory:
 
 Install RDKit as follows
