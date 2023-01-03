@@ -7,7 +7,7 @@ def regression_metrics(model, X, Y):
     scores = []
     scores.append(["MedAE", metrics.median_absolute_error(Y_pred, Y)])
     scores.append(["MAE", metrics.mean_absolute_error(Y_pred, Y)])
-    scores.append(["MSE", metrics.mean_squared_error(Y_pred, Y)])
+    scores.append(["RMSE", metrics.mean_squared_error(Y_pred, Y, squared=False)])
     r2 = metrics.r2_score(Y, Y_pred)
     y_max = max(Y.max(), Y_pred.max())
     y_min = min(Y.min(), Y_pred.min())
