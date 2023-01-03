@@ -61,3 +61,32 @@ class TableCleaner:
             i for i, b in enumerate(list(X.isnull().any(axis=1))) if not b
         ]
         return self.success_row
+
+
+class FeatureMasker:
+    def __init__(self, remaining_cols=None):
+        self.remaining_cols = remaining_cols
+
+    def fit(self, X=None, Y=None):
+        return self
+
+    def transform(self, data):
+        if self.remaining_cols is None:
+            return data
+        elif type(data) is pd.core.frame.DataFrame:
+            return data[self.remaining_cols]
+        elif type(data) is np.ndarray:
+            return data[:, self.remaining_cols]
+        else:
+            raise
+
+
+def features_top(top, model, X):
+    return [
+        sorted(
+            [[c, fi] for c, fi in zip(X.columns, model.feature_importances_)],
+            key=lambda x: x[1],
+            reverse=True,
+        )[i][0]
+        for i in range(top)
+    ]
