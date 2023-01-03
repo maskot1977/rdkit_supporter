@@ -53,7 +53,7 @@ def classification_metrics(model, X, Y):
     axes[0].set_xlabel("Score")
     axes[0].grid()
 
-    tn, fp, fn, tp = metrics.confusion_matrix(Y2, Y_pred).ravel()
+    tn, fp, fn, tp = metrics.confusion_matrix(Y, Y_pred).ravel()
     axes[1].set_title("tn, fp, fn, tp = {} {} {} {}".format(tn, fp, fn, tp))
     axes[1].bar(["Positive", "Negative"], [tp, tn])
     axes[1].bar(["Positive", "Negative"], [-fn, -fp])
