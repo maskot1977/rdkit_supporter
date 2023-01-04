@@ -15,6 +15,28 @@ from rdkit_installer.fingerprints import Fingerprinter
 from sklearn.metrics import r2_score, balanced_accuracy_score, cohen_kappa_score
 from sklearn.neural_network import MLPRegressor, MLPClassifier
 
+class VotingEstimator:
+    def __init__(self, estimators):
+        self.estimators = estimators
+    
+    def predict(self, X, return_std=False):
+        Y_preds = []
+        if hasattr(self.estimators[0][1], "predict_proba") or type(self.estimators[0][1]) is sklearn.svm._classes.SVC:
+            for model_name, model in self.estimators:
+                Y_preds.append(model.predict_proba(X)[:, 1])
+            tmp = np.vstack(Y_preds).mean(axis=0)
+            if return_std:
+                return np.where(tmp > 0.5, 1, 0), np.vstack(Y_preds).var(axis=0)
+            else:
+                return np.where(tmp > 0.5, 1, 0)
+        else:
+            for model_name, model in self.estimators:
+                Y_preds.append(model.predict(X))
+            if return_std:
+                return np.vstack(Y_preds).mean(axis=0), np.vstack(Y_preds).var(axis=0)
+            else:
+                return np.vstack(Y_preds).mean(axis=0)
+
 
 class SmilesBaggingMLP:
     def __init__(self, smiles_col, target_col, n_samples=1000, estimator=MLPRegressor, n_class=None):
