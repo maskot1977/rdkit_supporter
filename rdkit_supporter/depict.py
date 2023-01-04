@@ -59,6 +59,46 @@ def classification_metrics(model, X, Y):
     axes[1].bar(["Positive", "Negative"], [-fn, -fp])
     axes[1].grid()
     plt.show()
+    
+from sklearn.model_selection import KFold
+from sklearn.metrics import r2_score
+from sklearn import metrics
+import sklearn.svm._classes
+
+import copy
+def kfold_cv(model, X, Y, measure=r2_score):
+    n_splits=4
+    kf = KFold(n_splits=n_splits, random_state=53, shuffle=True)
+    fig, axes = plt.subplots(nrows=1, ncols=n_splits, figsize=(4*n_splits, 4))
+    models = []
+    for i, (train_index, test_index) in enumerate(kf.split(X)):
+        X_train = X.iloc[train_index, :]
+        X_test = X.iloc[test_index, :]
+        Y_train = Y.iloc[train_index]
+        Y_test = Y.iloc[test_index]
+        model.fit(X_train, Y_train)
+        models.append(copy.deepcopy(model))
+            
+        Y_pred = model.predict(X_test)
+        if hasattr(model, "predict_proba") or type(model) is sklearn.svm._classes.SVC:
+            tn, fp, fn, tp = metrics.confusion_matrix(Y_test, Y_pred).ravel()
+            axes[i].set_title("tn, fp, fn, tp = {} {} {} {}".format(tn, fp, fn, tp))
+            axes[i].bar(["Positive", "Negative"], [tp, tn])
+            axes[i].bar(["Positive", "Negative"], [-fn, -fp])
+            axes[i].grid()
+        else:
+            mae = measure(Y_test, Y_pred)
+            y_max = max(Y.max(), Y_pred.max())
+            y_min = min(Y.min(), Y_pred.min())
+            axes[i].set_title("R2={}".format(mae))
+            axes[i].scatter(Y_test, Y_pred, alpha=0.5, c=Y_test)
+            axes[i].plot([y_min, y_max], [y_min, y_max], c="r")
+            axes[i].set_xlabel("Y_true")
+            if i == 0:
+                axes[i].set_ylabel("Y_pred")
+            axes[i].grid()
+    plt.show()
+    return models
 
 def feature_importances(model, X, topnum=10):
     topnum = 10
