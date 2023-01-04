@@ -66,9 +66,8 @@ from sklearn import metrics
 import sklearn.svm._classes
 
 import copy
-def kfold_cv(model, X, Y, measure=r2_score):
+def kfold_cv(model, X, Y, kf=KFold(n_splits=n_splits, random_state=53, shuffle=True)):
     n_splits=4
-    kf = KFold(n_splits=n_splits, random_state=53, shuffle=True)
     fig, axes = plt.subplots(nrows=1, ncols=n_splits, figsize=(4*n_splits, 4))
     models = []
     for i, (train_index, test_index) in enumerate(kf.split(X)):
@@ -87,10 +86,10 @@ def kfold_cv(model, X, Y, measure=r2_score):
             axes[i].bar(["Positive", "Negative"], [-fn, -fp])
             axes[i].grid()
         else:
-            mae = measure(Y_test, Y_pred)
+            r2 = metrics.r2_score(Y_test, Y_pred)
             y_max = max(Y.max(), Y_pred.max())
             y_min = min(Y.min(), Y_pred.min())
-            axes[i].set_title("R2={}".format(mae))
+            axes[i].set_title("R2={}".format(r2))
             axes[i].scatter(Y_test, Y_pred, alpha=0.5, c=Y_test)
             axes[i].plot([y_min, y_max], [y_min, y_max], c="r")
             axes[i].set_xlabel("Y_true")
