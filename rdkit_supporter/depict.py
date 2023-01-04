@@ -65,8 +65,7 @@ def classification_metrics(model, X, Y):
     plt.show()
     
 
-def kfold_cv(model, X, Y, kf=KFold(n_splits=n_splits, random_state=53, shuffle=True)):
-    n_splits=4
+def kfold_cv(model, X, Y, n_splits=4, kf=KFold(n_splits=4, random_state=53, shuffle=True)):
     fig, axes = plt.subplots(nrows=1, ncols=n_splits, figsize=(4*n_splits, 4))
     models = []
     for i, (train_index, test_index) in enumerate(kf.split(X)):
