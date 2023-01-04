@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 from sklearn import metrics
-import matplotlib.pyplot as plt
+from sklearn.model_selection import KFold
+import sklearn.svm._classes
+import copy
+import numpy as np
 
 def regression_metrics(model, X, Y):
     Y_pred = model.predict(X)
@@ -8,7 +11,8 @@ def regression_metrics(model, X, Y):
     scores.append(["MedAE", metrics.median_absolute_error(Y_pred, Y)])
     scores.append(["MAE", metrics.mean_absolute_error(Y_pred, Y)])
     scores.append(["RMSE", metrics.mean_squared_error(Y_pred, Y, squared=False)])
-    r2 = metrics.r2_score(Y, Y_pred)
+    r = np.corrcoef(Y_test, Y_pred)[0][1]
+    r2 = metrics.r2_score(Y_test, Y_pred)
     y_max = max(Y.max(), Y_pred.max())
     y_min = min(Y.min(), Y_pred.min())
     y_height = abs(y_max - y_min) / 2
@@ -16,7 +20,7 @@ def regression_metrics(model, X, Y):
     axes[0].barh([x[0] for x in scores], [x[1] for x in scores])
     axes[0].set_xlabel("Score")
     axes[0].grid()
-    axes[1].set_title("R2={}".format(r2))
+    axes[1].set_title("R={}".format(r))
     axes[1].scatter(Y, Y_pred, alpha=0.5, c=Y)
     axes[1].plot([y_min, y_max], [y_min, y_max], c="r")
     axes[1].set_xlabel("Y_true")
@@ -60,12 +64,7 @@ def classification_metrics(model, X, Y):
     axes[1].grid()
     plt.show()
     
-from sklearn.model_selection import KFold
-from sklearn.metrics import r2_score
-from sklearn import metrics
-import sklearn.svm._classes
 
-import copy
 def kfold_cv(model, X, Y, kf=KFold(n_splits=n_splits, random_state=53, shuffle=True)):
     n_splits=4
     fig, axes = plt.subplots(nrows=1, ncols=n_splits, figsize=(4*n_splits, 4))
@@ -86,10 +85,11 @@ def kfold_cv(model, X, Y, kf=KFold(n_splits=n_splits, random_state=53, shuffle=T
             axes[i].bar(["Positive", "Negative"], [-fn, -fp])
             axes[i].grid()
         else:
+            r = np.corrcoef(Y_test, Y_pred)[0][1]
             r2 = metrics.r2_score(Y_test, Y_pred)
             y_max = max(Y.max(), Y_pred.max())
             y_min = min(Y.min(), Y_pred.min())
-            axes[i].set_title("R2={}".format(r2))
+            axes[i].set_title("R={:.4f}, R2={:.4f}".format(r, r2))
             axes[i].scatter(Y_test, Y_pred, alpha=0.5, c=Y_test)
             axes[i].plot([y_min, y_max], [y_min, y_max], c="r")
             axes[i].set_xlabel("Y_true")
