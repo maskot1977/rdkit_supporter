@@ -14,6 +14,7 @@ from rdkit_supporter.descriptors import calc_descriptors
 from rdkit_supporter.fingerprints import Fingerprinter
 from sklearn.metrics import r2_score, balanced_accuracy_score, cohen_kappa_score
 from sklearn.neural_network import MLPRegressor, MLPClassifier
+import sklearn.svm._classes
 
 class VotingEstimator:
     def __init__(self, estimators):
