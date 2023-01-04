@@ -30,7 +30,7 @@ def regression_metrics(model, X, Y):
     axes[2].set_ylabel("Y_err")
     axes[2].set_ylim([-y_height, y_height])
     axes[2].grid()
-    axes[2].colorbar()
+    axes[2].set_colorbar()
     plt.show()
     
     
