@@ -11,8 +11,8 @@ def regression_metrics(model, X, Y):
     scores.append(["MedAE", metrics.median_absolute_error(Y_pred, Y)])
     scores.append(["MAE", metrics.mean_absolute_error(Y_pred, Y)])
     scores.append(["RMSE", metrics.mean_squared_error(Y_pred, Y, squared=False)])
-    r = np.corrcoef(Y_test, Y_pred)[0][1]
-    r2 = metrics.r2_score(Y_test, Y_pred)
+    r = np.corrcoef(Y, Y_pred)[0][1]
+    r2 = metrics.r2_score(Y, Y_pred)
     y_max = max(Y.max(), Y_pred.max())
     y_min = min(Y.min(), Y_pred.min())
     y_height = abs(y_max - y_min) / 2
