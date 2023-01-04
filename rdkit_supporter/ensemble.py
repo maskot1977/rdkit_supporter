@@ -9,9 +9,9 @@ import copy
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from rdkit_installer import preprocess
-from rdkit_installer.descriptors import calc_descriptors
-from rdkit_installer.fingerprints import Fingerprinter
+from rdkit_supporter import preprocess
+from rdkit_supporter.descriptors import calc_descriptors
+from rdkit_supporter.fingerprints import Fingerprinter
 from sklearn.metrics import r2_score, balanced_accuracy_score, cohen_kappa_score
 from sklearn.neural_network import MLPRegressor, MLPClassifier
 
