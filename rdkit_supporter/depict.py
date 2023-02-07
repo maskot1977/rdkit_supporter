@@ -6,7 +6,7 @@ import copy
 import numpy as np
 
 def regression_metrics(model, X, Y):
-    Y_pred = model.predict(X)
+    Y_pred = model.predict(X).flatten()
     scores = []
     scores.append(["MedAE", metrics.median_absolute_error(Y_pred, Y)])
     scores.append(["MAE", metrics.mean_absolute_error(Y_pred, Y)])
@@ -38,7 +38,7 @@ def regression_metrics(model, X, Y):
     
     
 def classification_metrics(model, X, Y):
-    Y_pred = model.predict(X)
+    Y_pred = model.predict(X).flatten()
     scores = []
     scores.append(["MCC", metrics.matthews_corrcoef(Y_pred, Y)])
     scores.append(["Cohen's Kappa", metrics.cohen_kappa_score(Y_pred, Y)])
