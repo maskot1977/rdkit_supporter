@@ -35,17 +35,20 @@ def regression_metrics(model, X, Y):
     axes[2].set_ylim([-y_height, y_height])
     axes[2].grid()
     plt.show()
+    return r, r2
     
     
 def classification_metrics(model, X, Y):
     Y_pred = model.predict(X).flatten()
     scores = []
+    precision = metrics.precision_score(Y_pred, Y)
+    recall = metrics.recall_score(Y_pred, Y)
     scores.append(["MCC", metrics.matthews_corrcoef(Y_pred, Y)])
     scores.append(["Cohen's Kappa", metrics.cohen_kappa_score(Y_pred, Y)])
     scores.append(["F1", metrics.f1_score(Y_pred, Y)])
     scores.append(["Average Precision", metrics.average_precision_score(Y_pred, Y)])
-    scores.append(["Precision", metrics.precision_score(Y_pred, Y)])
-    scores.append(["Recall", metrics.recall_score(Y_pred, Y)])
+    scores.append(["Precision", precision])
+    scores.append(["Recall", recall])
     scores.append(["AUC", metrics.balanced_accuracy_score(Y_pred, Y)])
     #scores.append(["TopK ACC", metrics.top_k_accuracy_score(Y_pred, Y)])
     scores.append(["Balanced ACC", metrics.balanced_accuracy_score(Y_pred, Y)])
@@ -63,6 +66,7 @@ def classification_metrics(model, X, Y):
     axes[1].bar(["Positive", "Negative"], [-fn, -fp])
     axes[1].grid()
     plt.show()
+    return precision, recall
     
 
 def kfold_cv(model, X, Y, n_splits=4, kf=KFold(n_splits=4, random_state=53, shuffle=True)):
